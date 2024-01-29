@@ -12,7 +12,7 @@ pip install -r requirements.txt
 # for codespace
 ln -s /home/codespace/.local/lib/python3.10/site-packages/bin/streamlit /home/codespace/.local/bin/
 
-streamlit run chatbot.py
+streamlit run main.py
 ```
 
 Dependency: google-generativeai, streamlit, pillow
