@@ -6,7 +6,13 @@ from PIL import Image
 import google.generativeai as genai
 
 def _generate():
-  # Generate
+  """Generate text.
+
+  Callback function for generate text using gemini-pro(-vision)
+  and stream write on `placeholder`.
+
+  `model` and `placeholder` should be defined when this function is called.
+  """
   model = genai.GenerativeModel(model_name=model_name,
                                 generation_config=generation_config,
                                 safety_settings=safety_settings)
@@ -18,24 +24,27 @@ def _generate():
       text += chunk.text
       placeholder.write(text + "▌")
     except:
-      text = "***Error occurred*** {chunk.prompt_feedback}"
+      text = "***Error occurred***\n{chunk.prompt_feedback}"
   placeholder.write(text)
   st.session_state.response = text
 
 def _add(is_picture=False):
+  """Add empty element into the `session_state.parts`."""
   if is_picture:
     st.session_state.parts.append(None)
   else:
     st.session_state.parts.append('')
 
 def _del(idx):
+  """Remove from the `session_state.parts`."""
   st.session_state.parts = st.session_state.parts[:idx]
-  st.session_state.response = ''
 
 def _decline():
+  """Ignore the response."""
   st.session_state.response = ''
 
 def _accept():
+  """Save the response into the `session_state.parts`"""
   if type(st.session_state.parts[-1]) == str:
     st.session_state.parts[-1] += st.session_state.response
   else:
@@ -87,7 +96,10 @@ with st.sidebar:
 parts = []
 for i, part in enumerate(st.session_state.parts):
   if type(part) == str:
-    text = st.text_area(f"Part {i}", value=part, label_visibility='hidden')
+    if i == len(st.session_state.parts)-1:
+      text = st.text_area(f"Part {i}", value=part, label_visibility='hidden', on_change=_generate)
+    else:
+      text = st.text_area(f"Part {i}", value=part, label_visibility='hidden')
     parts.append(text)
     continue
   if part is None:

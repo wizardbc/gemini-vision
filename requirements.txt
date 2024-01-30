@@ -1,3 +1,5 @@
+numpy
+pandas
 pillow
 google-generativeai
 streamlit

@@ -15,4 +15,4 @@ ln -s /home/codespace/.local/lib/python3.10/site-packages/bin/streamlit /home/co
 streamlit run main.py
 ```
 
-Dependency: google-generativeai, streamlit, pillow
+Dependency: google-generativeai, streamlit, pillow, pandas
