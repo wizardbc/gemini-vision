@@ -11,11 +11,19 @@ def _generate():
   Callback function for generate text using gemini-pro(-vision)
   and stream write on `placeholder`.
 
-  `model` and `placeholder` should be defined when this function is called.
+  `model_name`, `generation_config` and `placeholder`
+  should be defined when this function is called.
   """
-  model = genai.GenerativeModel(model_name=model_name,
-                                generation_config=generation_config,
-                                safety_settings=safety_settings)
+  model = genai.GenerativeModel(
+    model_name=model_name,
+    generation_config=generation_config,
+    safety_settings={
+      'harassment':'block_none',
+      'hate':'block_none',
+      'sex':'block_none',
+      'danger':'block_none'
+    }
+  )
   response = model.generate_content(st.session_state.parts, stream=True)
 
   text = ''
@@ -86,12 +94,7 @@ with st.sidebar:
     "top_k": st.slider("top_k", min_value=1, value=40),
     "top_p": st.slider("top_p", min_value=0.0, max_value=1.0, value=0.95),
   }
-  safety_settings={
-    'harassment':'block_none',
-    'hate':'block_none',
-    'sex':'block_none',
-    'danger':'block_none'
-  }
+  
 
 parts = []
 for i, part in enumerate(st.session_state.parts):
